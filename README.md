@@ -1,4 +1,19 @@
-Proof of Reserve - Phase 1
+# Proof of Reserve - Phase 1
+
+## Overview
+This project implements a Proof of Reserve (PoR) API for validating reserves using Chainlink. The system supports token issuance and burning, secured with JWT authentication.
+
+## Features
+- **Token Issuance and Burning:** Update reserves dynamically.
+- **Secure API:** Protect routes with JWT authentication.
+- **Chainlink-Compatible JSON:** Provide structured data for Chainlink PoR.
+
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo.git
+   cd ProofOfReserve-Phase1
+
 Overview
 This project implements a basic Proof of Reserve (PoR) system to expose hash data of encrypted files via a JSON endpoint. This serves as the foundation for verifying reserves dynamically and can be extended for blockchain integration and decentralized storage.
 
