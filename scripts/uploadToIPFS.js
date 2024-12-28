@@ -1,20 +1,14 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import generateFileHash from './generateHash.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import uploadToIPFS from './uploadToIPFS.js';
 
 const proofDataPath = path.join(__dirname, '..', 'proofData.json');
 const aesFilePath = path.join(__dirname, '..', 'aesFiles', 'swift_certificate.aes');
 
 async function updateProofData() {
   const hash = generateFileHash(aesFilePath);
-
-  // CID ya generado
-  const cid = "QmTqCgDtFo1AMStm7HKvaAZghDd8ScHc45dAafGormg6Px";
-
+  const cid = await uploadToIPFS(aesFilePath); // Usa Helia para subir el archivo a IPFS
   const proofData = JSON.parse(fs.readFileSync(proofDataPath, 'utf8'));
 
   // Actualiza el JSON con hash, CID y timestamp
@@ -29,4 +23,4 @@ async function updateProofData() {
 updateProofData().catch((err) =>
   console.error('Error updating proof data:', err)
 );
-
+    

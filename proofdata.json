@@ -1,10 +1,13 @@
 {
   "accountName": "ONEB",
-  "totalReserve": 1000000,
-  "timestamp": "2024-12-28T20:15:45.711Z",
+  "totalReserve": 229965000,
+  "timestamp": "2024-12-28T21:37:48.623Z",
   "ripcord": false,
   "ripcordDetails": [],
   "hashes": {
     "swiftAES": "1a0f564ddc6039457b2fb26b3d6a316c15eba20a886449847c3210c35821a693"
-  }
+  },
+  "cid": "QmTqCgDtFo1AMStm7HKvaAZghDd8ScHc45dAafGormg6Px",
+  "issuedTokens": 30000,
+  "burnedTokens": null
 }

@@ -1,32 +1,26 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import generateFileHash from './generateHash.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const proofDataPath = path.join(__dirname, '..', 'proofData.json');
-const aesFilePath = path.join(__dirname, '..', 'aesFiles', 'swift_certificate.aes');
 
-async function updateProofData() {
-  const hash = generateFileHash(aesFilePath);
-
-  // CID ya generado
-  const cid = "QmTqCgDtFo1AMStm7HKvaAZghDd8ScHc45dAafGormg6Px";
-
+function updateBurnedTokens(amount) {
   const proofData = JSON.parse(fs.readFileSync(proofDataPath, 'utf8'));
 
-  // Actualiza el JSON con hash, CID y timestamp
-  proofData.hashes.swiftAES = hash;
-  proofData.cid = cid;
+  // Ajusta los tokens quemados y el balance de reservas
+  proofData.burnedTokens += amount;
+  proofData.totalReserve += amount;
+
+  // Actualiza el timestamp
   proofData.timestamp = new Date().toISOString();
 
+  // Guarda los cambios en el archivo
   fs.writeFileSync(proofDataPath, JSON.stringify(proofData, null, 2), 'utf8');
   console.log('proofData.json updated:', proofData);
 }
 
-updateProofData().catch((err) =>
-  console.error('Error updating proof data:', err)
-);
-
+// Ejemplo: Quema 5000 tokens
+updateBurnedTokens(5000);

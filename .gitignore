@@ -1,1 +1,22 @@
-aesFiles/*
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Compiled files
+*.log
+*.lock
+
+# Sensitive directories
+aesFiles/
+proofData.json
+
+# Debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System files
+.DS_Store
+Thumbs.db
