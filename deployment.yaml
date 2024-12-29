@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proof-of-reserve
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: proof-of-reserve
+  template:
+    metadata:
+      labels:
+        app: proof-of-reserve
+    spec:
+      containers:
+      - name: proof-of-reserve
+        image: proof-of-reserve:latest
+        ports:
+        - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proof-of-reserve-service
+spec:
+  selector:
+    app: proof-of-reserve
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: LoadBalancer

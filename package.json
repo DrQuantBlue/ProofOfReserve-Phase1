@@ -16,7 +16,8 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "ipfs-http-client": "^58.0.0",
+    "ipfs-http-client": "^57.0.3",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.12.0",
     "pg": "^8.13.1",
     "web3": "^4.16.0"

@@ -17,6 +17,32 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Docker-specific files
+docker-compose.override.yml
+docker-compose.override.yaml
+*.stack.yml
+stack.yml
+stack.yaml
+Dockerfile*
+.dockerignore
+# Volumes
+volumes/
+*.tar
+# Build folders
+build/
+.cache/
+# Docker logs
+docker.log
+
 # System files
 .DS_Store
 Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Truffle and Ethereum build files
+contracts/build/
+migrations/build/
+test/build/
