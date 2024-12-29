@@ -13,6 +13,6 @@ function generateFileHash(filePath) {
 module.exports = generateFileHash;
 
 // Ejemplo de uso
-const aesFilePath = path.join(__dirname, '..', 'aesFiles', 'swift_certificate.aes');
+const aesFilePath = path.join(__dirname, '..', 'aesFiles', '23B.AES');
 const hash = generateFileHash(aesFilePath);
 console.log(`Hash for ${aesFilePath}:`, hash);

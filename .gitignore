@@ -12,6 +12,7 @@ node_modules/
 aesFiles/
 proofData.json
 
+
 # Debug files
 npm-debug.log*
 yarn-debug.log*

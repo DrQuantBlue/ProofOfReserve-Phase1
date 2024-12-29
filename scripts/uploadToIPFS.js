@@ -1,26 +1,35 @@
 import fs from 'fs';
-import path from 'path';
-import generateFileHash from './generateHash.js';
-import uploadToIPFS from './uploadToIPFS.js';
+import pinataSDK from '@pinata/sdk';
+import dotenv from 'dotenv';
 
-const proofDataPath = path.join(__dirname, '..', 'proofData.json');
-const aesFilePath = path.join(__dirname, '..', 'aesFiles', 'swift_certificate.aes');
+dotenv.config(); // Carga las variables de entorno desde .env
 
-async function updateProofData() {
-  const hash = generateFileHash(aesFilePath);
-  const cid = await uploadToIPFS(aesFilePath); // Usa Helia para subir el archivo a IPFS
-  const proofData = JSON.parse(fs.readFileSync(proofDataPath, 'utf8'));
+const pinata = pinataSDK(process.env.PINATA_API_KEY, process.env.PINATA_SECRET_API_KEY);
 
-  // Actualiza el JSON con hash, CID y timestamp
-  proofData.hashes.swiftAES = hash;
-  proofData.cid = cid;
-  proofData.timestamp = new Date().toISOString();
+async function uploadToIPFS(filePath) {
+  try {
+    const readableStreamForFile = fs.createReadStream(filePath);
+    const options = {
+      pinataMetadata: {
+        name: 'ProofOfReserve_AES_File',
+        keyvalues: {
+          project: 'ProofOfReserve',
+          fileType: 'AES',
+        },
+      },
+      pinataOptions: {
+        cidVersion: 1,
+      },
+    };
 
-  fs.writeFileSync(proofDataPath, JSON.stringify(proofData, null, 2), 'utf8');
-  console.log('proofData.json updated:', proofData);
+    console.log('Uploading file to IPFS...');
+    const result = await pinata.pinFileToIPFS(readableStreamForFile, options);
+    console.log('File successfully uploaded to IPFS. CID:', result.IpfsHash);
+    return result.IpfsHash;
+  } catch (error) {
+    console.error('Error uploading file to IPFS:', error);
+    throw error;
+  }
 }
 
-updateProofData().catch((err) =>
-  console.error('Error updating proof data:', err)
-);
-    
+export default uploadToIPFS;

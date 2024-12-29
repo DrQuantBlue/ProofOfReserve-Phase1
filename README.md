@@ -1,114 +1,153 @@
-# Proof of Reserve - Phase 1
+# Proof of Reserve (PoR) - Phase 1
 
-## Overview
-This project implements a Proof of Reserve (PoR) API for validating reserves using Chainlink. The system supports token issuance and burning, secured with JWT authentication.
+## Project Overview
+Proof of Reserve (PoR) is a comprehensive solution designed to ensure transparency and security in token issuance and burning processes. This system leverages decentralized technologies, including Chainlink, IPFS, and smart contracts, to maintain an auditable and publicly accessible record of reserves.
 
-## Features
-- **Token Issuance and Burning:** Update reserves dynamically.
-- **Secure API:** Protect routes with JWT authentication.
-- **Chainlink-Compatible JSON:** Provide structured data for Chainlink PoR.
+### Features
+- Real-time monitoring of token burn events via Alchemy.
+- Automated updates to the reserve balance (`totalReserve`) upon detecting burn events.
+- Integration with IPFS (using Pinata) for publishing updated Proof of Reserve data.
+- Secure handling of sensitive data through encryption (AES).
+- Dockerized environment for ease of deployment.
 
-## Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-repo.git
-   cd ProofOfReserve-Phase1
+---
 
-Overview
-This project implements a basic Proof of Reserve (PoR) system to expose hash data of encrypted files via a JSON endpoint. This serves as the foundation for verifying reserves dynamically and can be extended for blockchain integration and decentralized storage.
+## Project Structure
+```plaintext
+ProofOfReserve_Phase1/
+│
+├── aesFiles/                     # Encrypted sensitive files
+│   └──certificate.aes
+│
+├── contracts/                    # Smart contracts
+│   ├── contracts/
+│   ├── migrations/
+│   └── test/
+│
+├── scripts/                      # Utility scripts
+│   ├── generateHash.js           # Generate hashes for files
+│   ├── updateBurnedTokens.js     # Update burned token data
+│   ├── updateIssuedTokens.js     # Update issued token data
+│   ├── updateProofData.js        # Update proofData.json
+│   └── uploadToIPFS.js           # Upload data to IPFS
+│
+├── services/                     # External service integrations
+│   ├── alchemy.js                # Alchemy SDK integration
+│   ├── pinata.js                 # Pinata SDK integration
+│   └── chainlink.js              # Chainlink node integration
+│
+├── config/                       # Configuration files
+│   ├── default.json              # General configuration
+│   └── environments/             # Environment-specific configurations
+│       ├── development.json
+│       └── production.json
+│
+├── docker/                       # Docker-related files
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   └── deployment.yaml
+│
+├── public/                       # Publicly accessible files
+│   └── proofData.json            # Current state of Proof of Reserve
+│
+├── .env                          # Environment variables
+├── .gitignore                    # Files to ignore in Git
+├── app.js                        # Main application entry point
+├── package.json                  # Project dependencies
+├── package-lock.json             # Dependency lockfile
+└── README.md                     # Project documentation
+```
 
-Project Structure
-graphql
-Copiar código
-ProofOfReserve-Phase1/
-├── package.json          # Project dependencies
-├── app.js                # Main API server
-├── aesFiles/             # Encrypted files (AES, PDF, etc.)
-├── scripts/              # Auxiliary scripts
-│   ├── generateHash.js
-│   ├── updateProofData.js
-├── proofData.json        # JSON file with PoR data
-└── README.md             # Documentation
+---
 
+## Installation and Setup
 
-Getting Started
-1. Install Dependencies
-Make sure Node.js and npm are installed. Run the following command in the project directory:
+### Prerequisites
+- [Node.js](https://nodejs.org/) (version 18 or higher)
+- [Docker](https://www.docker.com/) and Docker Compose
+- Alchemy API Key
+- Pinata API Key and Secret Key
 
-bash
-Copiar código
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/DrQuantBlue/ProofOfReserve-Phase1.git
+cd ProofOfReserve-Phase1
+```
+
+### Step 2: Install Dependencies
+```bash
 npm install
-2. Generate File Hashes
-Place your encrypted files in the aesFiles/ folder. Then, execute the hash generation script:
+```
 
-bash
-Copiar código
-node scripts/generateHash.js
-This will generate a SHA-256 hash for the specified file.
+### Step 3: Set Up Environment Variables
+Create a `.env` file in the root directory with the following:
+```env
+ALCHEMY_API_KEY=your_alchemy_api_key
+PINATA_API_KEY=your_pinata_api_key
+PINATA_SECRET_KEY=your_pinata_secret_key
+BURN_ADDRESS=0xDIRECCION_DE_QUEMA
+```
 
-3. Update PoR JSON Data
-Update the proofData.json file with the new hash and timestamp using the following script:
+### Step 4: Build and Run with Docker
+1. Build the Docker image:
+```bash
+docker build -t proof-of-reserve .
+```
+2. Run the container:
+```bash
+docker run -d -p 3000:3000 proof-of-reserve
+```
 
-bash
-Copiar código
-node scripts/updateProofData.js
-The script will automatically read the file, generate its hash, and update the PoR JSON.
+---
 
-4. Start the API Server
-Launch the Express server to expose the PoR data via a JSON endpoint:
+## Usage
 
+### Monitoring Burn Events
+The system uses Alchemy to monitor real-time token burn events. Events are processed and automatically update the `proofData.json` file.
 
-node app.js
-The server will run on the default port 3000. Access the PoR data at:
+### Updating Proof of Reserve
+Run the script to update the reserve after detecting a burn event:
+```bash
+node scripts/updateBurnedTokens.js
+```
 
+### Publishing Updated Data to IPFS
+Upload the updated `proofData.json` to IPFS:
+```bash
+node scripts/uploadToIPFS.js
+```
 
+---
 
-http://localhost:3000/por
-Example PoR JSON Output
-The API will respond with a JSON similar to the following:
+## Deployment
+Use the provided `docker-compose.yml` for multi-container orchestration or `deployment.yaml` for Kubernetes setups.
 
-json
-Copiar código
-{
-  "accountName": "ONEB",
-  "totalReserve": 1000000,
-  "timestamp": "2024-12-28T12:00:00Z",
-  "ripcord": false,
-  "ripcordDetails": [],
-  "hashes": {
-    "swiftAES": "4522c9d91545bd154e331bd7a957e27c3c5dbe493ce02467dfc2f735f68fc913"
-  }
-}
+---
 
+## Contributing
+1. Fork the repository.
+2. Create your feature branch:
+```bash
+git checkout -b feature/your-feature-name
+```
+3. Commit your changes:
+```bash
+git commit -m "Add some feature"
+```
+4. Push to the branch:
+```bash
+git push origin feature/your-feature-name
+```
+5. Open a pull request.
 
-accountName: The token or reserve identifier (e.g., "ONEB").
-totalReserve: The total reserve value in USD or tokens.
-timestamp: The ISO8601/RFC3339 timestamp of the PoR data.
-ripcord: Boolean indicating if there are anomalies.
-ripcordDetails: Array with anomaly details (if any).
-hashes: Object containing the SHA-256 hash of the encrypted files.
+---
 
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-Next Steps:
+---
 
-Integrate IPFS: Upload the files to decentralized storage and return the CID (Content Identifier).
-
-Register PoR Data on Blockchain: Use Ethereum, Polygon, or another chain to ensure immutability.
-
-Automate Hash Updates: Schedule periodic updates to the proofData.json file.
-
-Add Unit Tests: Implement automated testing for the scripts and API.
-
-Extend API Features:
-
-Add endpoints for uploading files dynamically.
-Include real-time validation.
-Contributing
-Contributions are welcome! Please submit issues or pull requests via the GitHub repository.
-
-License
-This project is licensed under the ISC License.
-
-Author: Blue Reserve Team
-Date: 2024-12-28
-
+## Acknowledgments
+- [Alchemy](https://www.alchemy.com/)
+- [Pinata](https://pinata.cloud/)
+- [Chainlink](https://chain.link/)

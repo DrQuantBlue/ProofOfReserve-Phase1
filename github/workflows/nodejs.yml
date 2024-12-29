@@ -1,0 +1,37 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout del repositorio
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Configurar Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22' # Cambia la versión según tu entorno
+
+    # Instalar dependencias
+    - name: Install dependencies
+      run: npm install
+
+    # Correr las pruebas
+    - name: Run tests
+      run: npm test
+
+    # Validar el formato del código (opcional)
+    - name: Lint code
+      run: npm run lint
+      continue-on-error: true
