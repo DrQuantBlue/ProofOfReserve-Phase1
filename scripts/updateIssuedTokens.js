@@ -1,14 +1,14 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const proofDataPath = path.join(__dirname, '..', 'proofData.json');
+const proofDataPath = path.join(__dirname, "..", "proofData.json");
 
 function updateIssuedTokens(amount) {
-  const proofData = JSON.parse(fs.readFileSync(proofDataPath, 'utf8'));
+  const proofData = JSON.parse(fs.readFileSync(proofDataPath, "utf8"));
 
   // Ajusta los tokens emitidos y la reserva total
   proofData.issuedTokens += amount;
@@ -23,8 +23,8 @@ function updateIssuedTokens(amount) {
   proofData.timestamp = new Date().toISOString();
 
   // Guarda los cambios en el archivo
-  fs.writeFileSync(proofDataPath, JSON.stringify(proofData, null, 2), 'utf8');
-  console.log('proofData.json updated:', proofData);
+  fs.writeFileSync(proofDataPath, JSON.stringify(proofData, null, 2), "utf8");
+  console.log("proofData.json updated:", proofData);
 }
 
 // Ejemplo: Emite 10000 tokens
