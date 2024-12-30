@@ -61,7 +61,7 @@ app.get("/access/cid", authenticateToken, (req, res) => {
 app.post("/upload", authenticateToken, async (req, res) => {
   try {
     // Lógica para subir el archivo a IPFS
-    const { uploadToIPFS } = require("../scripts/uploadToIPFS");
+    const { uploadToIPFS } = require("./scripts/uploadToIPFS");
     const cid = await uploadToIPFS(aesFilePath);
 
     // Actualiza proofData.json con el nuevo CID
