@@ -194,7 +194,20 @@ This API is fully compatible with Chainlink oracles and adheres to their require
 - **Timestamp (`timestamp`)**: The last update time in ISO8601 format.
 - **Ripcord Details (`ripcord`)**: A flag indicating anomalies (if any).
 
-Chainlink nodes can securely query this endpoint for off-chain validation of reserves.
+### Example Scenario
+Chainlink nodes can securely query this endpoint for off-chain validation of reserves. For instance:
+1. A Chainlink node sends a GET request to the `/por` endpoint.
+2. The server responds with:
+   ```json
+   {
+     "accountName": "ONEB",
+     "totalReserve": 100000000,
+     "timestamp": "2024-12-30T15:00:00.000Z",
+     "ripcord": false
+   }
+   ```
+3. The Chainlink oracle processes this data and provides the proof to its smart contract for further validation.
+4. Structured JSON allows seamless integration with Chainlink, ensuring real-time visibility of reserve status.
 
 ---
 
@@ -205,7 +218,32 @@ Chainlink nodes can securely query this endpoint for off-chain validation of res
 
 ---
 
-### 📧 Contact
-For questions or support, please reach out:
-- **Email**: suppot@bluereserve.life
-- **GitHub**: [Proof of Reserve GitHub](https://github.com/DrQuantBlue/ProofOfReserve-Phase1)
+## 🌍 Architecture Diagram
+
+### **📈 Data Flow**
+1. **Monitoring**: Captures blockchain events via Alchemy.
+2. **Processing**: Updates `proofData.json` and generates a hash.
+3. **Publication**: Uploads data to IPFS through Pinata.
+4. **Consumption**: Exposes JSON data for Chainlink integration.
+
+```xml
+<diagram>
+  <node id="monitoring" label="Monitoring">
+    <description>Capture blockchain events via Alchemy</description>
+    <link target="processing" />
+  </node>
+  <node id="processing" label="Processing">
+    <description>Update proofData.json & Generate Hash</description>
+    <link target="publication" />
+  </node>
+  <node id="publication" label="Publication">
+    <description>Upload data to IPFS</description>
+    <link target="consumption" />
+  </node>
+  <node id="consumption" label="Consumption">
+    <description>Provide JSON data for Chainlink</description>
+  </node>
+</diagram>
+```
+
+---
