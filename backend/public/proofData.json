@@ -1,0 +1,19 @@
+{
+  "accountName": "ONEB",
+  "totalReserve": 229965000,
+  "timestamp": "2024-12-30T06:23:14.379Z",
+  "ripcord": false,
+  "ripcordDetails": [],
+  "hashes": {
+    "latestHash": "bf5d9870a21ade3350586b437ba4dfd428c7b83cbe889f94286828fc55463540",
+    "previousHashes": [
+      "bf5d9870a21ade3350586b437ba4dfd428c7b83cbe889f94286828fc55463540",
+      "bf5d9870a21ade3350586b437ba4dfd428c7b83cbe889f94286828fc55463540"
+    ]
+  },
+  "proof": {
+    "totalSupply": 1000000,
+    "reserveRatio": "1:1",
+    "validator": "Chainlink"
+  }
+}

@@ -1,32 +1,33 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-import generateFileHash from "./generateHash.js";
+const fs = require("fs");
+const path = require("path");
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const proofDataPath = path.join(__dirname, "..", "public", "proofData.json");
 
-const proofDataPath = path.join(__dirname, "..", "proofData.json");
-const aesFilePath = path.join(__dirname, "..", "aesFiles", "swift_certificate.aes");
+function adjustReserves(action, amount) {
+  try {
+    const proofData = JSON.parse(fs.readFileSync(proofDataPath, "utf8"));
 
-async function updateProofData() {
-  const hash = generateFileHash(aesFilePath);
+    if (action === "mint") {
+      proofData.totalReserve += amount; // Aumenta las reservas
+      proofData.issuedTokens += amount;
+    } else if (action === "burn") {
+      if (proofData.totalReserve < amount) {
+        throw new Error("Insufficient reserve to burn the requested amount.");
+      }
+      proofData.totalReserve -= amount; // Disminuye las reservas
+      proofData.burnedTokens = (proofData.burnedTokens || 0) + amount;
+    } else {
+      throw new Error("Invalid action. Use 'mint' or 'burn'.");
+    }
 
-  // CID ya generado
-  const cid = {};
+    proofData.timestamp = new Date().toISOString(); // Actualiza el timestamp
 
-  const proofData = JSON.parse(fs.readFileSync(proofDataPath, "utf8"));
-
-  // Actualiza el JSON con hash, CID y timestamp
-  proofData.hashes.swiftAES = hash;
-  proofData.cid = cid;
-  proofData.timestamp = new Date().toISOString();
-
-  fs.writeFileSync(proofDataPath, JSON.stringify(proofData, null, 2), "utf8");
-  console.log("proofData.json updated:", proofData);
+    fs.writeFileSync(proofDataPath, JSON.stringify(proofData, null, 2), "utf8");
+    console.log(`[INFO] Reserves updated successfully: Action=${action}, Amount=${amount}`);
+  } catch (error) {
+    console.error(`[ERROR] Failed to update reserves: ${error.message}`);
+    throw error;
+  }
 }
 
-updateProofData().catch((err) =>
-  console.error("Error updating proof data:", err)
-);
-
+module.exports = { adjustReserves };

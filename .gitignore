@@ -1,4 +1,3 @@
-node_modules
 # Node.js dependencies
 node_modules/
 
@@ -9,10 +8,10 @@ node_modules/
 *.log
 *.lock
 
-# Sensitive directories
+# Sensitive directories and files
 aesFiles/
-proofData.json
-
+config/apiKeys.json
+public/proofData.json
 
 # Debug files
 npm-debug.log*
@@ -23,18 +22,14 @@ yarn-error.log*
 docker-compose.override.yml
 docker-compose.override.yaml
 *.stack.yml
-stack.yml
-stack.yaml
 Dockerfile*
 .dockerignore
-# Volumes
 volumes/
 *.tar
+
 # Build folders
 build/
 .cache/
-# Docker logs
-docker.log
 
 # System files
 .DS_Store
